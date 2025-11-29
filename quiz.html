@@ -7,6 +7,100 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <!-- Extra styling voor quiz met vinkjes -->
+  <style>
+    .quiz-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .quiz-item {
+      margin-bottom: 16px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,0.05);
+      background: rgba(255,255,255,0.8);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .quiz-item p {
+      margin-bottom: 6px;
+      grid-column: 1 / -1;
+    }
+
+    .quiz-input {
+      padding: 6px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.18);
+      font-size: 0.9rem;
+      width: 100%;
+    }
+
+    .quiz-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 2px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      margin-left: 6px;
+    }
+
+    .quiz-item.correct {
+      border-color: #5fad41;
+      background: #e7f7e4;
+    }
+
+    .quiz-item.incorrect {
+      border-color: #d9534f;
+      background: #fce5e5;
+    }
+
+    .quiz-item.correct .quiz-icon {
+      border-color: #5fad41;
+      color: #5fad41;
+    }
+
+    .quiz-item.correct .quiz-icon::before {
+      content: "✔";
+    }
+
+    .quiz-item.incorrect .quiz-icon {
+      border-color: #d9534f;
+      color: #d9534f;
+    }
+
+    .quiz-item.incorrect .quiz-icon::before {
+      content: "✘";
+    }
+
+    .check-button {
+      margin-top: 8px;
+      margin-bottom: 10px;
+    }
+
+    .result-message {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 600;
+      text-align: center;
+      background: #e7f7e4;
+      border: 1px solid #5fad41;
+      color: #356b27;
+      display: none;
+    }
+
+    .result-message.visible {
+      display: block;
+    }
+  </style>
 </head>
 <body>
 
@@ -33,42 +127,84 @@
       <section aria-labelledby="quiz-title">
         <h2 id="quiz-title">De vragen</h2>
         <p class="subtitle">
-          Lees de vragen, ga desnoods terug naar de verhalen en schrijf je antwoorden op papier
-          of laat leerlingen/kinderen ze invullen.
+          Vul bij elke vraag een kort antwoord in. Je hoeft niet de hele zin te typen:
+          één of twee kernwoorden is genoeg (bijvoorbeeld <em>“ui en knoflook”</em>,
+          <em>“bitter”</em> of <em>“ketchup”</em>).
         </p>
 
         <ol class="quiz-list">
-          <li>Met welk ingrediënt begint Nonna altijd haar saus in de pan?</li>
-          <li>Waarom bakt Nonna de knoflook altijd kort en op laag vuur?</li>
-          <li>Welke tomaten gebruikt Nonna het liefst voor haar saus?</li>
-          <li>Wanneer voegt Nonna de verse basilicum toe?</li>
-          <li>Wat bedoelt Nonna als ze zegt dat de pasta “al dente” moet zijn?</li>
-          <li>Waarom bewaart Nonna een kopje van het kookwater van de pasta?</li>
-          <li>Hoe maakt Nonna het gerecht af als de pasta is afgegoten?</li>
-          <li>Welke kaas raspt Nonna over de pasta?</li>
-          <li>Wat doet Nonna soms in de saus om de smaak dieper te maken?</li>
-          <li>Wat doet Nonna nooit met pasta aan tafel?</li>
+          <li class="quiz-item" data-rule="all" data-keywords="ui,knoflook">
+            <p>1. Met welk ingrediënt begint Nonna altijd haar saus in de pan?</p>
+            <input class="quiz-input" type="text" placeholder="Bijv. ui en knoflook">
+            <span class="quiz-icon" aria-hidden="true"></span>
+          </li>
+
+          <li class="quiz-item" data-rule="any" data-keywords="bitter">
+            <p>2. Waarom bakt Nonna de knoflook altijd kort en op laag vuur?</p>
+            <input class="quiz-input" type="text" placeholder="Bijv. anders wordt hij bitter">
+            <span class="quiz-icon" aria-hidden="true"></span>
+          </li>
+
+          <li class="quiz-item" data-rule="any" data-keywords="passata,gezeefde,gepelde,blik">
+            <p>3. Welke tomaten gebruikt Nonna het liefst voor haar saus?</p>
+            <input class="quiz-input" type="text" placeholder="Bijv. passata of tomaten uit blik">
+            <span class="quiz-icon" aria-hidden="true"></span>
+          </li>
+
+          <li class="quiz-item" data-rule="any" data-keywords="eind,laatst,bord">
+            <p>4. Wanneer voegt Nonna de verse basilicum toe?</p>
+            <input class="quiz-input" type="text" placeholder="Bijv. op het eind / op het bord">
+            <span class="quiz-icon" aria-hidden="true"></span>
+          </li>
+
+          <li class="quiz-item" data-rule="any" data-keywords="beet,al dente">
+            <p>5. Wat bedoelt Nonna als ze zegt dat de pasta “al dente” moet zijn?</p>
+            <input class="quiz-input" type="text" placeholder="Bijv. met een lichte beet">
+            <span class="quiz-icon" aria-hidden="true"></span>
+          </li>
+
+          <li class="quiz-item" data-rule="all" data-keywords="saus,smuig,dunner">
+            <p>6. Waarom bewaart Nonna een kopje van het kookwater van de pasta?</p>
+            <input class="quiz-input" type="text" placeholder="Bijv. om de saus dunner en smeuïger te maken">
+            <span class="quiz-icon" aria-hidden="true"></span>
+          </li>
+
+          <li class="quiz-item" data-rule="any" data-keywords="bij de saus,saus in de pan,mee bakken">
+            <p>7. Hoe maakt Nonna het gerecht af als de pasta is afgegoten?</p>
+            <input class="quiz-input" type="text" placeholder="Bijv. pasta bij de saus in de pan">
+            <span class="quiz-icon" aria-hidden="true"></span>
+          </li>
+
+          <li class="quiz-item" data-rule="any" data-keywords="parmezaan,pecorino">
+            <p>8. Welke kaas raspt Nonna over de pasta?</p>
+            <input class="quiz-input" type="text" placeholder="Bijv. Parmezaan of Pecorino">
+            <span class="quiz-icon" aria-hidden="true"></span>
+          </li>
+
+          <li class="quiz-item" data-rule="any" data-keywords="suiker,balsamico">
+            <p>9. Wat doet Nonna soms in de saus om de smaak dieper te maken?</p>
+            <input class="quiz-input" type="text" placeholder="Bijv. een snufje suiker of balsamico">
+            <span class="quiz-icon" aria-hidden="true"></span>
+          </li>
+
+          <li class="quiz-item" data-rule="any" data-keywords="ketchup">
+            <p>10. Wat doet Nonna nooit met pasta aan tafel?</p>
+            <input class="quiz-input" type="text" placeholder="Bijv. er ketchup overheen doen">
+            <span class="quiz-icon" aria-hidden="true"></span>
+          </li>
         </ol>
+
+        <button type="button" class="button-primary check-button" id="check-answers">
+          Controleer antwoorden
+        </button>
+
+        <div id="result-message" class="result-message">
+          Je cadeau ligt bij de Cabrio!
+        </div>
 
         <div class="accent-box">
           <strong>Tip van Nonna:</strong> Je mag spieken in de verhalen, dat is niet vals spelen.
           In haar keuken leert iedereen door te kijken, luisteren en… proeven.
-        </div>
-      </section>
-
-      <!-- Extra: ruimte voor "antwoorden" (optioneel) -->
-      <section aria-labelledby="antwoorden">
-        <h2 id="antwoorden">Antwoorden (optioneel voor de juf/meester)</h2>
-        <p class="subtitle">
-          Je kunt hier later zelf een lijst met correcte antwoorden neerzetten, of dit blok helemaal verwijderen.
-        </p>
-        <div class="story">
-          <div class="story-inner">
-            <p>
-              <em>Voor nu:</em> deze plek is speciaal voor de juf/meester/organisator.
-              Wil je de antwoorden erbij zetten, dan kun je hier een lijst maken of dit blok in de HTML verwijderen.
-            </p>
-          </div>
         </div>
       </section>
 
@@ -88,6 +224,60 @@
     </footer>
   </div>
 </div>
+
+<!-- Simpele JavaScript-checker -->
+<script>
+  function normalize(text) {
+    return text
+      .toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // accenten weg
+      .replace(/[^a-z0-9\s]/g, "")                     // speciale tekens weg
+      .replace(/\s+/g, " ")                            // dubbele spaties
+      .trim();
+  }
+
+  document.getElementById('check-answers').addEventListener('click', function () {
+    const items = document.querySelectorAll('.quiz-item');
+    let allCorrect = true;
+
+    items.forEach(item => {
+      const input = item.querySelector('.quiz-input');
+      const raw = input.value || "";
+      const value = normalize(raw);
+
+      const rule = item.dataset.rule || 'any';
+      const keywordsRaw = item.dataset.keywords || "";
+      const keywords = keywordsRaw.split(',').map(k => normalize(k)).filter(Boolean);
+
+      let correct = false;
+
+      if (!value) {
+        correct = false;
+      } else if (rule === 'all') {
+        // alle keywords moeten voorkomen
+        correct = keywords.every(kw => value.includes(kw));
+      } else if (rule === 'any') {
+        // minstens één keyword moet voorkomen
+        correct = keywords.some(kw => value.includes(kw));
+      }
+
+      item.classList.remove('correct', 'incorrect');
+      if (correct) {
+        item.classList.add('correct');
+      } else {
+        item.classList.add('incorrect');
+        allCorrect = false;
+      }
+    });
+
+    const resultBox = document.getElementById('result-message');
+    if (allCorrect) {
+      resultBox.classList.add('visible');
+    } else {
+      resultBox.classList.remove('visible');
+    }
+  });
+</script>
 
 </body>
 </html>
